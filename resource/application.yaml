@@ -25,7 +25,8 @@ service:
   database:
     host: localhost
     port: 5432
-    dbname: postgres
-    url: postgres://${service.database.dbname}:${service.database.password}@${service.database.username}:${service.database.port}/${service.database.dbname}
-    username: postgres
-    password: pass
+    dbname: erp4btc
+    url: postgresql://user:qpVTacISnsvdOYGHAMKJ3WSzPV2QgG3T@dpg-cpvi0vpu0jms73at8ps0-a/erp4btc
+#    url: postgres://${service.database.dbname}:${service.database.password}@${service.database.username}:${service.database.port}/${service.database.dbname}
+    username: user
+    password: qpVTacISnsvdOYGHAMKJ3WSzPV2QgG3T

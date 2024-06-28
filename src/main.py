@@ -25,6 +25,7 @@ if __name__ == '__main__':
     # flask_thread.start()
     # app_run()
     WEBHOOK_URL = 'https://ms-tgbot-crab.onrender.com/telegram'
+    # WEBHOOK_URL = 'http://localhost:5000/telegram'
     bot_app().bot.set_webhook(WEBHOOK_URL)
 
     app.run(host='0.0.0.0', port=c.PORT)
