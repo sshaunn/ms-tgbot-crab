@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: bitnami/postgresql # use latest official postgres version
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db-schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+    environment:
+      POSTGRESQL_PASSWORD: pass
+      POSTGRESQL_ADMIN_PASSWORD: pass
+      POSTGRESQL_NAX_CONNECTIONS: 500
+      POSTGRESQL_MAX_PREPARED_TRANSACTIONS: 500
+
+  postgrest:
+    image: postgrest/postgrest
+    container_name: pgAdmin
+    ports:
+      - "5555:80"
+    env_file:
+       - database.env # configure postgrest
+    depends_on:
+      - postgres
+
+volumes:
+  pg_data:
+  es_data:
+    driver: local
