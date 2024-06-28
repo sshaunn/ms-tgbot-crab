@@ -1,3 +1,4 @@
+from src.common.logger import log
 from src.infrastructure.telegram.telegram_app import bot_app
 from telegram import Update
 from flask import Blueprint, jsonify, request
@@ -46,6 +47,9 @@ def get_customer_trade_volumn_by_uid(uid):
 
 @telegram_blueprint.route('/', methods=['POST'])
 def webhook():
+    log.info("running here1")
     update = Update.de_json(request.get_json(), bot)
+    log.info("running here2")
     bot_app().process_update(update)
+    log.info("running here3")
     return 'OK', 200
