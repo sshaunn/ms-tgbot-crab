@@ -1,5 +1,4 @@
-import src.infrastructure.telegram.telegram_app as tgapp
-
+from src.infrastructure.telegram.telegram_app import bot_app
 from telegram import Update
 from flask import Blueprint, jsonify, request
 
@@ -12,7 +11,7 @@ from src.service.customers_service import (
     volumn_calculator,
     get_all_customers_by_client)
 
-bot = tgapp.app_run().bot
+bot = bot_app().bot
 
 timer_blueprint = Blueprint('gettime', __name__, url_prefix='/gettime')
 customer_blueprint = Blueprint('customer', __name__, url_prefix='/customer')
@@ -48,5 +47,5 @@ def get_customer_trade_volumn_by_uid(uid):
 @telegram_blueprint.route('/', methods=['POST'])
 def webhook():
     update = Update.de_json(request.get_json(), bot)
-    tgapp.app_run().process_update(update)
+    bot_app().process_update(update)
     return 'OK', 200

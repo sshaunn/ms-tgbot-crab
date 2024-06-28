@@ -22,6 +22,8 @@ ACCESS_KEY: Final = os.environ.get('ACCESS_KEY')
 SECRET_KEY: Final = os.environ.get('SECRET_KEY')
 PASSPHRASE: Final = os.environ.get('PASSPHRASE')
 
+PORT: Final = config['server']['port']
+
 # endpoint
 BASE_URL: Final = config['service']['bit-get']['baseUrl']
 AGENT_ENDPOINT: Final = config['service']['bit-get']['endpoint']['customer-list']

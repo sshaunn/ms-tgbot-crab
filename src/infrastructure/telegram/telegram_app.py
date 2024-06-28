@@ -53,7 +53,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     await update.message.reply_text("Help!")
 
 
-def app_run():
+def bot_app():
     """Start the bot."""
     application = Application.builder().token(c.TOKEN).build()
     application.add_handler(conversation_handler(check, check_customer_uid_command, cancel, UID, 'check'))
