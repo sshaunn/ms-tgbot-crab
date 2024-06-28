@@ -45,8 +45,8 @@ def get_customer_trade_volumn_by_uid(uid):
         return jsonify({'err': f"{uid} not found", 'status': 404}), 404
 
 
-@telegram_blueprint.route('/start', methods=['POST'])
+@telegram_blueprint.route('/', methods=['POST'])
 def webhook():
     update = Update.de_json(request.get_json(), bot)
     tgapp.app_run().process_update(update)
-    return 'OK'
+    return 'OK', 200
