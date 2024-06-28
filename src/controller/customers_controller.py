@@ -21,9 +21,7 @@ telegram_blueprint = Blueprint('telegram', __name__, url_prefix='/telegram')
 
 @timer_blueprint.route('/', methods=['GET'])
 def get_all_customers():
-    server_time = get_all_customers_by_client()
-    # server_time = volumn_calculator(8118815904)
-    # server_time = update_customer_trade_volumn(101, 100)
+    server_time = get_customers()
     return jsonify(server_time)
 
 

@@ -13,7 +13,7 @@ def get_customers():
     response = requests.get(url)
     customers = response.json()
 
-    customer_helper.save_customer(101, "shaun", "shen", "101", "1710845728000")
+    # customer_helper.save_customer(101, "shaun", "shen", "101", "1710845728000")
     return customers
 
 
