@@ -1,7 +1,6 @@
 import os
 import yaml
 
-from yaml.loader import FullLoader
 from dotenv import load_dotenv, find_dotenv
 from typing import Final
 
