@@ -5,8 +5,8 @@ from yaml.loader import FullLoader
 from dotenv import load_dotenv, find_dotenv
 from typing import Final
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-resource_path = os.path.join(current_dir, '..', 'resource', 'application.yaml')
+current_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+resource_path = os.path.join(current_dir, 'resource', 'application.yaml')
 
 load_dotenv(find_dotenv())
 
