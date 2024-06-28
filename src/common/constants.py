@@ -9,7 +9,7 @@ load_dotenv(find_dotenv())
 
 
 # def configure():
-with open("../resource/application.yaml", 'r') as f:
+with open("resource/application.yaml", 'r') as f:
     config = yaml.safe_load(f)
 
 
