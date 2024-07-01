@@ -10,7 +10,7 @@ CORS(app)
 app.register_blueprint(timer_blueprint)
 app.register_blueprint(customer_blueprint)
 app.register_blueprint(telegram_blueprint)
-threading.Thread(target=bot_app()).start()
+# threading.Thread(target=bot_app()).start()
 
 
 class FlaskThread(threading.Thread):
