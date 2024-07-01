@@ -1,9 +1,9 @@
-# import asyncio
-
+import threading
 from src.common.logger import log
 
 from flask import Blueprint, jsonify, request
 # from src.infrastructure.telegram.telegram_service import kick_all_inactive_customers
+from src.infrastructure.telegram.telegram_app import bot_app
 from src.service.customers_service import (
     get_customers,
     get_customer_by_client_uid,
@@ -28,15 +28,9 @@ telegram_blueprint = Blueprint('telegram', __name__, url_prefix='/api')
 
 @timer_blueprint.route('/admin/gettime', methods=['GET'])
 def get_all_customers():
-    # async def kick():
-    #
-    #     c = await kick_all_inactive_customers()
-    #     return c
-    # cc = asyncio.run(kick())
-    # log.info("what=%s", cc)
-    # return {"msg": "hi"}, 200
-    test = get_customers()
-    return test
+    # test = get_customers()
+    threading.Thread(target=bot_app()).start()
+    return {'msg': "bot starting"}, 201
 
 
 @customer_blueprint.route('/admin/customers', methods=['GET'])
