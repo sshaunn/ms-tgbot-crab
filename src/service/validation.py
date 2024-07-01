@@ -1,5 +1,4 @@
 from datetime import datetime, date
-import datetime as dt
 
 from src.service.customers_service import get_customer_by_uid, update_customer_trade_volumn_by_client
 

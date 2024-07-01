@@ -5,15 +5,10 @@ import src.repository.customers_repository_helper as customer_helper
 import requests
 
 import src.common.constants as c
-from src.model.customers import Customer
 from datetime import datetime
 from src.common.logger import log
 from src.bitget import utils
 from src.bitget.bitget_api import BitgetApi as baseApi
-
-# today = datetime.now()
-# last_month = today.replace(day=1) - dt.timedelta(days=1)
-# epoch_ms = int(last_month.timestamp() * 1000)
 
 
 def get_customers():

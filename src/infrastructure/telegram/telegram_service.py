@@ -7,7 +7,6 @@ import src.service.validation as vld
 from src.bitget.utils import get_current_date
 from src.common.logger import log
 from src.infrastructure.telegram.telegram_helper import extract_numeric_uid, create_group_invite_link
-from src.repository.customers_repository_helper import get_all_customers_in_group_chat
 from src.service.customers_service import (get_customer_by_client_uid,
                                            save_customer,
                                            update_customer_membership,
