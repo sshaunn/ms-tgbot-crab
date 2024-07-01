@@ -13,9 +13,19 @@ app.register_blueprint(telegram_blueprint)
 threading.Thread(target=bot_app()).start()
 
 
+class FlaskThread(threading.Thread):
+    def run(self) -> None:
+        app.run(host='0.0.0.0', port=c.PORT)
+
+
+class TelegramThread(threading.Thread):
+    def run(self) -> None:
+        bot_app()
+
+
 if __name__ == '__main__':
-    # flask_thread = FlaskThread()
-    # flask_thread.start()
-    # bot_app()
+    flask_thread = FlaskThread()
+    flask_thread.start()
+    bot_app()
     #
-    app.run(host='0.0.0.0', port=c.PORT)
+    # app.run(host='0.0.0.0', port=c.PORT)
