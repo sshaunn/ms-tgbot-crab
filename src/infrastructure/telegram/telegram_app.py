@@ -24,13 +24,16 @@ from src.infrastructure.telegram.telegram_service import (check_customer_uid_com
                                                           start_customer_uid_command,
                                                           check_customer_membership,
                                                           kick_group_member,
-                                                          reinvite_customer)
-from src.model.customers import Customer
-from src.service.customers_service import get_customer_by_client_uid, save_customer, update_customer_membership
-
+                                                          reinvite_customer,
+                                                          send_heartbeat)
 from telegram import ForceReply, Update, ChatMember
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, ConversationHandler, \
-    ChatMemberHandler
+from telegram.ext import (CommandHandler,
+                          ContextTypes,
+                          MessageHandler,
+                          filters,
+                          ConversationHandler,
+                          ChatMemberHandler,
+                          Application)
 
 UID = range(2)
 
@@ -61,7 +64,7 @@ def bot_app():
     application.add_handler(conversation_handler(check, kick_group_member, cancel, UID, 'kick'))
     application.add_handler(conversation_handler(check, reinvite_customer, cancel, UID, 'rejoin'))
     application.add_handler(ChatMemberHandler(check_customer_membership, ChatMemberHandler.CHAT_MEMBER))
-
+    application.job_queue.run_repeating(send_heartbeat, interval=1800, first=1800)
     # check_conversation_handler()
     #
     # # on different commands - answer in Telegram
@@ -74,5 +77,5 @@ def bot_app():
     # application.start()
     # Run the bot until the user presses Ctrl-C
 
-    # application.run_polling(allowed_updates=Update.ALL_TYPES)
-    return application
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
+    # return application

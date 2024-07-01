@@ -1,6 +1,7 @@
 from datetime import datetime, date
+import datetime as dt
 
-from src.service.customers_service import get_customer_by_uid
+from src.service.customers_service import get_customer_by_uid, update_customer_trade_volumn_by_client
 
 
 def is_valid_uid(customer):
@@ -9,9 +10,17 @@ def is_valid_uid(customer):
 
 def is_exist_uid(uid):
     customer = get_customer_by_uid(uid)
-    return customer is not None and not customer['is_ban'] and customer['is_member']
+    if customer:
+        if not customer['is_ban'] or customer['is_member']:
+            return True
+    return False
 
 
-def can_rejoin(start_time):
+def is_ban(start_time):
     start_date = datetime.strptime(start_time.isoformat(), "%Y-%m-%d").date()
-    return (date.today() - start_date).days < 30
+    return (date.today() - start_date).days >= 30
+
+
+def is_over_trade_volumn(uid):
+    customer = update_customer_trade_volumn_by_client(uid)
+    return customer['trade_volumn'] >= 10000

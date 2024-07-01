@@ -12,7 +12,7 @@ def extract_numeric_uid(input_uid):
 
 async def create_group_invite_link(group_id, context: ContextTypes.DEFAULT_TYPE):
     try:
-        invite_link = await context.bot.create_chat_invite_link(chat_id=group_id,)
+        invite_link = await context.bot.create_chat_invite_link(chat_id=group_id, member_limit=1)
         return invite_link
     except Exception as ex:
         log.error("Error occurred when creating invite link, exception=%s", ex)

@@ -16,6 +16,7 @@ with open(resource_path, 'r') as f:
 
 
 # env variables
+ENV: Final = os.environ.get('ENV')
 TOKEN: Final = os.environ.get('TOKEN')
 USERNAME: Final = os.environ.get('USERNAME')
 ACCESS_KEY: Final = os.environ.get('ACCESS_KEY')
@@ -29,6 +30,8 @@ BASE_URL: Final = config['service']['bit-get']['baseUrl']
 AGENT_ENDPOINT: Final = config['service']['bit-get']['endpoint']['customer-list']
 VOLUMN_ENDPOINT: Final = config['service']['bit-get']['endpoint']['customer-trade-volumn']
 SERVER_TIME_ENDPOINT: Final = config['service']['bit-get']['endpoint']['server-time']
+
+TELEGRAM_API_PREFIX: Final = f"{config['service']['telegram']['base-url']}bot{TOKEN}"
 
 # http header
 CONTENT_TYPE: Final = 'Content-Type'
@@ -58,6 +61,11 @@ DBPORT: Final = config['service']['database']['port']
 DBNAME: Final = config['service']['database']['dbname']
 DB_USERNAME: Final = config['service']['database']['username']
 DB_PASSWORD: Final = config['service']['database']['password']
+DBHOST_PROD: Final = config['service']['database']['prod']['host']
+DBPORT_PROD: Final = config['service']['database']['prod']['port']
+DBNAME_PROD: Final = config['service']['database']['prod']['dbname']
+DB_USERNAME_PROD: Final = config['service']['database']['prod']['username']
+DB_PASSWORD_PROD: Final = config['service']['database']['prod']['password']
 
 # tg group id
 EFFECTIVE_CHAT_ID: Final = '-1002087737560'

@@ -1,11 +1,13 @@
-from telegram import Update, ChatMember
-from telegram.ext import ContextTypes, ConversationHandler
+from telegram import Update, ChatMember, Bot
+from telegram.ext import ContextTypes, ConversationHandler, Application
+from telegram.error import TelegramError
 
 import src.common.constants as c
 import src.service.validation as vld
 from src.bitget.utils import get_current_date
 from src.common.logger import log
 from src.infrastructure.telegram.telegram_helper import extract_numeric_uid, create_group_invite_link
+from src.repository.customers_repository_helper import get_all_customers_in_group_chat
 from src.service.customers_service import (get_customer_by_client_uid,
                                            save_customer,
                                            update_customer_membership,
@@ -20,10 +22,11 @@ NEXT = range(1)
 async def check_customer_uid_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     chat_type = update.message.chat.type
-    uid = extract_numeric_uid(update.message.text)
+    message = update.message.text
+    uid = extract_numeric_uid(message)
     customer = get_customer_by_client_uid(uid)
 
-    if chat_type == 'private':
+    if chat_type == 'private' and not message == "/cancel":
 
         if not vld.is_valid_uid(customer):
             log.error("UID is not matching, user_id=%s, user_name=%s", user.id, user.first_name)
@@ -42,7 +45,7 @@ async def check_customer_uid_command(update: Update, context: ContextTypes.DEFAU
             await update.message.reply_text(c.FINISH_CONVERSATION_MESSAGE)
             return ConversationHandler.END
 
-        membership = await context.bot.get_chat_member(chat_id=c.TEST_GROUP_ID, user_id=user.id)
+        membership = await context.bot.get_chat_member(chat_id=c.VIP_GROUP_ID, user_id=user.id)
         log.info("UID matching success, current user with UID=%s has membership=%s, and user=%s",
                  uid,
                  membership,
@@ -58,10 +61,11 @@ async def check_customer_uid_command(update: Update, context: ContextTypes.DEFAU
 async def start_customer_uid_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     chat_type = update.message.chat.type
-    uid = extract_numeric_uid(update.message.text)
+    message = update.message.text
+    uid = extract_numeric_uid(message)
     customer = get_customer_by_client_uid(uid)
 
-    if chat_type == 'private':
+    if chat_type == 'private' and not message == "/cancel":
 
         if not vld.is_valid_uid(customer):
             log.error("UID is not matching, uid=%s, user_id=%s, user_name=%s", uid, user.id, user.first_name)
@@ -86,7 +90,7 @@ async def start_customer_uid_command(update: Update, context: ContextTypes.DEFAU
                                  customer['registerTime'],
                                  join_time=get_current_date())
 
-        invite = await create_group_invite_link(c.TEST_GROUP_ID, context)
+        invite = await create_group_invite_link(c.VIP_GROUP_ID, context)
         log.info("sending invite link to the user with uid=%s, user=%s", uid, customer)
 
         await update.message.reply_text(c.SUCCESS_MESSAGE_UID_CHECK)
@@ -97,14 +101,17 @@ async def start_customer_uid_command(update: Update, context: ContextTypes.DEFAU
 async def reinvite_customer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     chat_type = update.message.chat.type
-    uid = extract_numeric_uid(update.message.text)
+    message = update.message.text
+    uid = extract_numeric_uid(message)
+    if message == "/cancel":
+        return ConversationHandler.END
     customer = get_customer_by_uid(uid)
-    if not vld.can_rejoin(customer['left_time']):
+    if not vld.is_over_trade_volumn(uid) and not vld.is_ban(customer['left_time']):
         await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_REJOIN)
         return ConversationHandler.END
 
     update_customer_rejoin(uid, False)
-    invite = await create_group_invite_link(c.TEST_GROUP_ID, context)
+    invite = await create_group_invite_link(c.VIP_GROUP_ID, context)
     log.info("sending invite link to the user with uid=%s, user=%s", uid, customer)
 
     await update.message.reply_text(c.SUCCESS_MESSAGE_UID_CHECK)
@@ -125,7 +132,7 @@ async def check_customer_membership(update: Update, context: ContextTypes.DEFAUL
 async def kick_group_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         uid = extract_numeric_uid(update.message.text)
-        chat_id = c.TEST_GROUP_ID
+        chat_id = c.VIP_GROUP_ID
 
         customer = get_customer_by_uid(uid)
         if not customer:
@@ -144,3 +151,21 @@ async def kick_group_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
         log.error(f'Error kicking user: {e}')
         await update.message.reply_text('An error occurred while trying to kick the user.')
     return ConversationHandler.END
+
+
+async def send_heartbeat(context):
+    await context.bot.send_message("-1002217128790", text="heartbeat")
+
+
+async def kick_all_inactive_customers():
+    # active_customers = get_all_customers_in_group_chat()
+    # url_kick = f"{c.TELEGRAM_API_PREFIX}/kickChatMember"
+    bot = Bot(c.TOKEN)
+    try:
+        members = await bot.get_chat(c.VIP_GROUP_ID)
+        # for m in members:
+        #     log.info(m.user)
+        return members
+    except TelegramError as e:
+        print(f"Error: {e}")
+        return None

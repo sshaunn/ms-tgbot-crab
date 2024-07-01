@@ -94,3 +94,10 @@ def normal_date_formater(date_string):
     dt = datetime.strptime(date_string, "%Y-%m-%d")
     epoch_time = int(calendar.timegm(dt.timetuple()))
     return epoch_time
+
+
+def volumn_calculator(trades):
+    total_volumn = 0
+    for trade in trades:
+        total_volumn += float(trade['volumn'])
+    return total_volumn
