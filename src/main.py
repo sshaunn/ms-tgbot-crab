@@ -23,8 +23,8 @@ class TelegramThread(threading.Thread):
 
 
 if __name__ == '__main__':
-    flask_thread = FlaskThread()
-    flask_thread.start()
-    bot_app()
-
-    # app.run(host='0.0.0.0', port=c.PORT)
+    # flask_thread = FlaskThread()
+    # flask_thread.start()
+    # bot_app()
+    threading.Thread(target=bot_app()).start()
+    app.run(host='0.0.0.0', port=c.PORT)
