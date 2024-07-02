@@ -47,7 +47,7 @@ async def check(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
-    log.info(20, "User with id=%s, name=%s canceled the conversation.", user.id, user.first_name)
+    log.info("User with id=%s, name=%s canceled the conversation.", user.id, user.first_name)
     await update.message.reply_text('您已终止对话,感谢关注,祝您交易顺利!')
     return ConversationHandler.END
 
