@@ -76,8 +76,8 @@ DB_PASSWORD_PROD: Final = config['service']['database']['prod']['password']
 
 # tg group id
 EFFECTIVE_CHAT_ID: Final = '-1002087737560'
-# VIP_GROUP_ID: Final = '-1001856345480'
-VIP_GROUP_ID: Final = config['service']['telegram']['test-group-id']
+VIP_GROUP_ID: Final = '-1001856345480'
+# VIP_GROUP_ID: Final = config['service']['telegram']['test-group-id']
 MAIN_GROUP_ID: Final = config['service']['telegram']['main-group-id']
 PRIVATE_GROUP_ID: Final = '-1002043576596'
 TEST_GROUP_ID: Final = config['service']['telegram']['test-group-id']
