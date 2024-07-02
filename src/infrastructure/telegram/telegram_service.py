@@ -105,6 +105,10 @@ async def reinvite_customer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if message == "/cancel":
         return ConversationHandler.END
     customer = get_customer_by_uid(uid)
+    if not customer:
+        await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_REJOIN)
+        return ConversationHandler.END
+
     if not vld.is_over_trade_volumn(uid) and not vld.is_ban(customer['left_time']):
         await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_REJOIN)
         return ConversationHandler.END
@@ -156,15 +160,7 @@ async def send_heartbeat(context):
     await context.bot.send_message("-1002217128790", text="heartbeat")
 
 
-async def kick_all_inactive_customers():
-    # active_customers = get_all_customers_in_group_chat()
-    # url_kick = f"{c.TELEGRAM_API_PREFIX}/kickChatMember"
-    bot = Bot(c.TOKEN)
-    try:
-        members = await bot.get_chat(c.VIP_GROUP_ID)
-        # for m in members:
-        #     log.info(m.user)
-        return members
-    except TelegramError as e:
-        print(f"Error: {e}")
-        return None
+# Usage
+# chat_id = -1001234567890  # Replace with your group chat ID
+# member_ids = app.run(get_all_members(chat_id))
+# print(member_ids)

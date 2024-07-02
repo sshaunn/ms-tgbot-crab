@@ -1,5 +1,7 @@
 import threading
-import src.common.constants as c
+
+import src.service.customers_service as cs
+
 from flask import Flask
 from flask_cors import CORS
 from src.controller.customers_controller import customer_blueprint, timer_blueprint, telegram_blueprint
@@ -10,22 +12,10 @@ CORS(app)
 app.register_blueprint(timer_blueprint)
 app.register_blueprint(customer_blueprint)
 app.register_blueprint(telegram_blueprint)
-# threading.Thread(target=bot_app()).start()
-
-
-class FlaskThread(threading.Thread):
-    def run(self) -> None:
-        app.run(host='0.0.0.0', port=c.PORT)
-
-
-class TelegramThread(threading.Thread):
-    def run(self) -> None:
-        bot_app()
 
 
 if __name__ == '__main__':
-    flask_thread = FlaskThread()
-    flask_thread.start()
+    threading.Thread(target=lambda: app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)).start()
+    # threading.Thread(target=lambda: scheduler_func()).start()
     bot_app()
-    #
     # app.run(host='0.0.0.0', port=c.PORT)

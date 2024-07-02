@@ -1,11 +1,15 @@
 import os
+from pathlib import Path
+
 import yaml
 
 from dotenv import load_dotenv, find_dotenv
 from typing import Final
 
-current_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-resource_path = os.path.join(current_dir, 'resource', 'application.yaml')
+project_root = Path(__file__).parent.parent.parent
+
+# Construct the path to the yaml file
+resource_path = project_root / 'resource' / 'application.yaml'
 
 load_dotenv(find_dotenv())
 
@@ -14,6 +18,9 @@ load_dotenv(find_dotenv())
 with open(resource_path, 'r') as f:
     config = yaml.safe_load(f)
 
+
+APP_ID: Final = os.environ.get('APP_ID')
+APP_HASH: Final = os.environ.get('APP_HASH')
 
 # env variables
 ENV: Final = os.environ.get('ENV')
@@ -69,7 +76,8 @@ DB_PASSWORD_PROD: Final = config['service']['database']['prod']['password']
 
 # tg group id
 EFFECTIVE_CHAT_ID: Final = '-1002087737560'
-VIP_GROUP_ID: Final = '-1001856345480'
+# VIP_GROUP_ID: Final = '-1001856345480'
+VIP_GROUP_ID: Final = config['service']['telegram']['test-group-id']
 PRIVATE_GROUP_ID: Final = '-1002043576596'
 TEST_GROUP_ID: Final = config['service']['telegram']['test-group-id']
 

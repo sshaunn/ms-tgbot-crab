@@ -1,23 +1,21 @@
-import threading
-from src.common.logger import log
+import asyncio
 
 from flask import Blueprint, jsonify, request
-# from src.infrastructure.telegram.telegram_service import kick_all_inactive_customers
-from src.infrastructure.telegram.telegram_app import bot_app
+
+from src.common.logger import log
 from src.service.customers_service import (
     get_customers,
     get_customer_by_client_uid,
     get_customer_by_uid,
-    update_customer_trade_volumn,
     get_customer_trade_volumn_by_client_uid,
-    volumn_calculator,
-    get_all_customers_by_client,
     kick_member_by_uid,
     set_member_whitelist,
     get_customers_like_uid_admin,
     update_all_customers_trade_volumn,
     kick_group_members,
-    update_customer_rejoin)
+    update_customer_rejoin,
+    kick_all_zombies,
+    update_customer_trade_volumn_scheduler)
 
 # bot = bot_app().bot
 
@@ -27,10 +25,8 @@ telegram_blueprint = Blueprint('telegram', __name__, url_prefix='/api')
 
 
 @timer_blueprint.route('/admin/gettime', methods=['GET'])
-def get_all_customers():
-    # test = get_customers()
-    threading.Thread(target=bot_app()).start()
-    return {'msg': "bot starting"}, 201
+def get_all():
+    return "ok"
 
 
 @customer_blueprint.route('/admin/customers', methods=['GET'])
@@ -46,10 +42,9 @@ def get_customer_by_uid_admin(uid):
         return jsonify(customer), 200
     else:
         return jsonify({'err': f"{uid} not found", 'status': 404}), 404
-    # return jsonify(customer) if customer else jsonify({'err': f"{uid} not found", 'status': 404}), 404
 
 
-@customer_blueprint.route('admin/customers/<int:uid>', methods=['GET'])
+@customer_blueprint.route('/admin/customers/<int:uid>', methods=['GET'])
 def get_customers_like_uid(uid):
     customers = get_customers_like_uid_admin(uid)
     return jsonify(customers), 200
@@ -121,6 +116,14 @@ def kick_all_customers_under_volumn_conditions():
     return jsonify(result), 201
 
 
+@customer_blueprint.route('/admin/customers/kick_zombies', methods=['POST'])
+def kick_zombies():
+    # req = request.json
+    # volumn_condition = req.get('trade_volumn')
+    kick_all_zombies()
+    return 'OK', 201
+
+
 @customer_blueprint.route('/admin/customer/ban', methods=['POST'])
 def update_member_ban_status():
     req = request.json
@@ -128,6 +131,12 @@ def update_member_ban_status():
     is_ban = req.get('is_ban')
     result = update_customer_rejoin(uid, is_ban)
     return jsonify(result), 201
+
+
+@customer_blueprint.route('/admin/scheduler', methods=['GET'])
+def get_scheduler():
+    update_customer_trade_volumn_scheduler()
+    return "ok", 200
 
 # @telegram_blueprint.route('/', methods=['POST'])
 # def webhook():

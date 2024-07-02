@@ -185,6 +185,25 @@ def update_customer_ban_status(uid, is_member, is_ban, left_time):
         return None
 
 
+def update_customer_ban_status_by_tgid(tgid, is_member, is_ban, left_time):
+    try:
+        dbconfig.exec_cursor("""
+        INSERT INTO erp4btc.customers (tgid, is_member, is_ban, left_time) 
+        VALUES (%s, %s, %s, %s)
+        ON CONFLICT (tgid) DO UPDATE SET 
+        is_member=EXCLUDED.is_member,
+        is_ban=EXCLUDED.is_ban,
+        left_time=EXCLUDED.left_time""", tgid, is_member, is_ban, left_time)
+        return {"tgid": tgid,
+                "is_member": is_member,
+                "is_ban": is_ban,
+                "left_time": left_time,
+                "message": "user banned success"}
+    except Exception as ex:
+        log.error("Error occurred when inserting customer record with uid=%s, and exception=%s", uid, ex)
+        return None
+
+
 def update_customer_rejoin(uid, is_ban):
     try:
         dbconfig.exec_cursor("""
@@ -221,4 +240,29 @@ def get_all_customers_in_group_chat():
         return None
     except Exception as ex:
         log.error("Error occurred when inserting customer record with uid=%s, and exception=%s", uid, ex)
+        return None
+
+
+def get_all_tgids():
+    try:
+        records = dbconfig.fetch_all_cursor("""SELECT * FROM erp4btc.customers WHERE is_member=True""")
+        if records:
+            return records
+        return None
+    except Exception as ex:
+        log.error("Error occurred when inserting customer record with uid=%s, and exception=%s", uid, ex)
+        return None
+
+
+def save_tgid(tgid):
+    try:
+        dbconfig.exec_cursor("""
+        INSERT INTO erp4btc.tgid1 (tgid) VALUES (%s)""", tgid)
+        # log.info("saving customer record into database, customer=%s", customer.to_dict())
+        return tgid
+    except UniqueViolation as uv:
+        log.error("Error occurred when inserting customer record with tgid=%s, and exception=%s", tgid, uv)
+        return None
+    except Exception as ex:
+        log.error("Error occurred when inserting customer record with tgid=%s, and exception=%s", tgid, ex)
         return None

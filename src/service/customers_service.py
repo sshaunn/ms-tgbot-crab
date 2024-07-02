@@ -1,6 +1,5 @@
 import time
 import datetime as dt
-
 import src.repository.customers_repository_helper as customer_helper
 import requests
 
@@ -216,3 +215,47 @@ def kick_group_members(trade_volumn=10000):
 def set_member_whitelist(uid, is_whitelist):
     customer = customer_helper.update_customer_whitelist(uid, is_whitelist)
     return customer
+
+
+def kick_all_zombies():
+    url_kick = f"{c.TELEGRAM_API_PREFIX}/kickChatMember"
+    customers = customer_helper.get_all_customers_in_group_chat()
+    active_tgids = list(map(lambda x: x['tgid'], customers))
+    tgids = customer_helper.get_all_tgids()
+    for tgid in tgids:
+        if tgid not in active_tgids:
+            params_kick = {
+                "chat_id": c.VIP_GROUP_ID,
+                "user_id": tgid,
+                "until_date": int((time.time()+30) * 1000)
+            }
+            requests.post(url_kick, params=params_kick)
+            customer = customer_helper.get_customer_by_key("tgid", tgid)
+            customer_helper.update_customer_ban_status(customer['uid'], False, True, datetime.now())
+            log.info("Kicking user with uid=%s, and tgid=%s success", customer['uid'], tgid)
+
+    return None
+
+
+def update_customer_trade_volumn_scheduler():
+    request = baseApi(c.ACCESS_KEY, c.SECRET_KEY, c.PASSPHRASE)
+    today = datetime.now()
+    last_month = today.replace(day=1) - dt.timedelta(days=1)
+    epoch_ms = int(last_month.timestamp() * 1000)
+    customers = customer_helper.get_all_customers()
+    for customer in customers:
+        params = {"uid": customer['uid'],
+                  "startTime": str(epoch_ms),
+                  "endTime": str(utils.get_timestamp()),
+                  "pageNo": 1,
+                  "pageSize": 1000
+                  }
+        response = request.post(c.VOLUMN_ENDPOINT, params)
+        time.sleep(0.11)
+        trade_list = response["data"] if response["data"] else None
+        if not trade_list:
+            return None
+        total_volumn = utils.volumn_calculator(trade_list)
+        log.info("total_volumn=%s", total_volumn)
+        customer_helper.update_customer_volumn(customer['uid'], total_volumn)
+    return None
