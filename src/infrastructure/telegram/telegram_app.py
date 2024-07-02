@@ -25,7 +25,8 @@ from src.infrastructure.telegram.telegram_service import (check_customer_uid_com
                                                           check_customer_membership,
                                                           kick_group_member,
                                                           reinvite_customer,
-                                                          send_heartbeat)
+                                                          send_heartbeat,
+                                                          check_trade_volumn)
 from telegram import ForceReply, Update, ChatMember
 from telegram.ext import (CommandHandler,
                           ContextTypes,
@@ -61,6 +62,7 @@ def bot_app():
     application = Application.builder().token(c.TOKEN).build()
     application.add_handler(conversation_handler(check, check_customer_uid_command, cancel, UID, 'check'))
     application.add_handler(conversation_handler(check, start_customer_uid_command, cancel, UID, 'start'))
+    application.add_handler(conversation_handler(check, check_trade_volumn, cancel, UID, 'volume'))
     application.add_handler(conversation_handler(check, kick_group_member, cancel, UID, 'kick'))
     application.add_handler(conversation_handler(check, reinvite_customer, cancel, UID, 'rejoin'))
     application.add_handler(ChatMemberHandler(check_customer_membership, ChatMemberHandler.CHAT_MEMBER))

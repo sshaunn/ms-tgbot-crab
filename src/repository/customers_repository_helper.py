@@ -234,23 +234,23 @@ def update_customer_whitelist(uid, is_whitelist):
 
 def get_all_customers_in_group_chat():
     try:
-        records = dbconfig.fetch_all_cursor("""SELECT * FROM erp4btc.customers WHERE is_member=True""")
+        records = dbconfig.fetch_all_cursor("""SELECT * FROM erp4btc.customers""")
         if records:
             return records
         return None
     except Exception as ex:
-        log.error("Error occurred when inserting customer record with uid=%s, and exception=%s", uid, ex)
+        log.error("Error occurred when inserting customer record with, and exception=%s", ex)
         return None
 
 
 def get_all_tgids():
     try:
-        records = dbconfig.fetch_all_cursor("""SELECT * FROM erp4btc.customers WHERE is_member=True""")
+        records = dbconfig.fetch_all_cursor("""SELECT tgid FROM erp4btc.tgid2""")
         if records:
             return records
         return None
     except Exception as ex:
-        log.error("Error occurred when inserting customer record with uid=%s, and exception=%s", uid, ex)
+        log.error("Error occurred when inserting customer record with and exception=%s", ex)
         return None
 
 

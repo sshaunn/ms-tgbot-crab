@@ -18,11 +18,7 @@ else
 
     # Run main.py once
     python main.py
-
+    (crontab -l 2>/dev/null; echo "0 0 * * * $(pwd)/project/src/scheduler.sh") | crontab -
+    echo "Cron job for scheduler.sh has been added or updated."
     # Lock file will be automatically removed by the trap on exit
 fi
-
-# Add or update cron job (this will run every time start.sh is executed)
-(crontab -l 2>/dev/null; echo "0 0 * * * $(pwd)/scheduler.sh") | crontab -
-
-echo "Cron job for scheduler.sh has been added or updated."

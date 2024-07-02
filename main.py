@@ -16,6 +16,5 @@ app.register_blueprint(telegram_blueprint)
 
 if __name__ == '__main__':
     threading.Thread(target=lambda: app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)).start()
-    # threading.Thread(target=lambda: scheduler_func()).start()
     bot_app()
     # app.run(host='0.0.0.0', port=c.PORT)

@@ -3,6 +3,7 @@ server:
 
 service:
   telegram:
+    main-group-id: -1001999851882
     vip-group-id: -1001856345480
     private-group-id: -1002043576596
     test-group-id: -1002205997540

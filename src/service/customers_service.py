@@ -152,7 +152,7 @@ def update_all_customers_trade_volumn(start_time, end_time):
     customers = get_customers()
     for customer in customers:
         update_customer_trade_volumn(customer['uid'], start_time, end_time)
-    return get_customers()
+    return customers
 
 
 def update_customer_membership(uid, membership):
@@ -220,9 +220,12 @@ def set_member_whitelist(uid, is_whitelist):
 def kick_all_zombies():
     url_kick = f"{c.TELEGRAM_API_PREFIX}/kickChatMember"
     customers = customer_helper.get_all_customers_in_group_chat()
-    active_tgids = list(map(lambda x: x['tgid'], customers))
+    log.info("type=%s, c=%s", type(customers), customers)
+    active_tgids = list(map(lambda x: str(x['tgid']), customers))
+    log.info("count of actives=%s", len(active_tgids))
     tgids = customer_helper.get_all_tgids()
     for tgid in tgids:
+        tgid=str(tgid)
         if tgid not in active_tgids:
             params_kick = {
                 "chat_id": c.VIP_GROUP_ID,
@@ -230,9 +233,12 @@ def kick_all_zombies():
                 "until_date": int((time.time()+30) * 1000)
             }
             requests.post(url_kick, params=params_kick)
-            customer = customer_helper.get_customer_by_key("tgid", tgid)
-            customer_helper.update_customer_ban_status(customer['uid'], False, True, datetime.now())
-            log.info("Kicking user with uid=%s, and tgid=%s success", customer['uid'], tgid)
+            # customer = customer_helper.get_customer_by_key("tgid", tgid)
+            # if not customer['uid']:
+            #     cus = get_customer_by_client_uid()
+            #     customer_helper.save_customer(customer['uid'], customer['firstname'], customer['lastname'], tgid, )
+            # customer_helper.update_customer_ban_status(customer['uid'], False, True, datetime.now())
+            log.info("Kicking user with and tgid=%s success", tgid)
 
     return None
 

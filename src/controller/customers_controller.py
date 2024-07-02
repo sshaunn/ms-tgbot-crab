@@ -32,6 +32,8 @@ def get_all():
 @customer_blueprint.route('/admin/customers', methods=['GET'])
 def get_all_customers():
     customers = get_customers()
+    if not customers:
+        return {"response": "Bad Request"}, 404
     return jsonify(customers)
 
 
