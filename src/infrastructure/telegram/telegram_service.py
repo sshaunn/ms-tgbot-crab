@@ -16,7 +16,7 @@ from src.service.customers_service import (get_customer_by_client_uid,
                                            update_customer_ban_status,
                                            get_customer_by_key,
                                            get_customer_by_uid,
-                                           update_customer_rejoin, update_customer_trade_volumn)
+                                           update_customer_rejoin, update_customer_trade_volumn, update_customer_trade_volumn_by_client)
 
 NEXT = range(1)
 
@@ -55,7 +55,7 @@ async def check_customer_uid_command(update: Update, context: ContextTypes.DEFAU
 
         if membership.status in [ChatMember.MEMBER, ChatMember.OWNER, ChatMember.ADMINISTRATOR]:
             update_customer_membership(uid, True)
-
+        update_customer_trade_volumn_by_client(uid)
         await update.message.reply_text(c.SUCCESS_MESSAGE_UID_CHECK)
     return ConversationHandler.END
 
@@ -91,7 +91,7 @@ async def start_customer_uid_command(update: Update, context: ContextTypes.DEFAU
                                  user.id,
                                  customer['registerTime'],
                                  join_time=get_current_date())
-
+        update_customer_trade_volumn_by_client(uid)
         invite_tuple = await create_group_invite_link(c.VIP_GROUP_ID, context)
         inv_first, inv_sec = invite_tuple
         log.info("sending invite link to the user with uid=%s, user=%s", uid, customer)

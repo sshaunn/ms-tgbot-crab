@@ -31,6 +31,7 @@ def get_customer_by_client_uid(uid):
     time.sleep(0.1)
     if not response["data"]:
         return None
+    log.info("checking customer success with uid=%s, user=%s", uid, response['data'][0])
     return response["data"][0]
 
 
