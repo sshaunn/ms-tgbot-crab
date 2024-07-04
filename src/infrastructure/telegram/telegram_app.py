@@ -94,14 +94,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def check(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send a message when the command /start is issued."""
-    await update.message.reply_text("开始验证Bitget-UID,请输入你的数字UID,或者输入/cancel退出验证:")
+    await update.message.reply_text("📲請輸入你的數字UID✅,\n↩️或輸入/cancel退出驗證❌")
     return UID
 
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     log.info("User with id=%s, name=%s canceled the conversation.", user.id, user.first_name)
-    await update.message.reply_text('您已终止对话,感谢关注,祝您交易顺利!')
+    await update.message.reply_text(c.FINISH_CONVERSATION_MESSAGE)
     return ConversationHandler.END
 
 
