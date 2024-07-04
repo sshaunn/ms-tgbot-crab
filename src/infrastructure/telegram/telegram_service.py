@@ -92,7 +92,7 @@ async def start_customer_uid_command(update: Update, context: ContextTypes.DEFAU
                                  customer['registerTime'],
                                  join_time=get_current_date())
         update_customer_trade_volumn_by_client(uid)
-        invite_tuple = await create_group_invite_link(c.VIP_GROUP_ID, context)
+        invite_tuple = await create_group_invite_link(c.MAIN_GROUP_ID, c.VIP_GROUP_ID, context)
         inv_first, inv_sec = invite_tuple
         log.info("sending invite link to the user with uid=%s, user=%s", uid, customer)
 
@@ -119,12 +119,12 @@ async def reinvite_customer(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
 
     update_customer_rejoin(uid, False)
-    invite_tuple = await create_group_invite_link(c.VIP_GROUP_ID, context)
+    invite_tuple = await create_group_invite_link(c.MAIN_GROUP_ID, c.VIP_GROUP_ID, context)
     log.info("sending invite link to the user with uid=%s, user=%s", uid, customer)
     inv_first, inv_sec = invite_tuple
     await update.message.reply_text(c.SUCCESS_MESSAGE_UID_CHECK)
-    await update.message.reply_text(f"这是第一个邀请链接: {inv_first.invite_link}")
-    await update.message.reply_text(f"这是第二个邀请链接: {inv_sec.invite_link}")
+    await update.message.reply_text(f"🍍鳳梨屋交流群邀請連結: {inv_first.invite_link}")
+    await update.message.reply_text(f"🪣海之霸VIP群邀請連結: {inv_sec.invite_link}")
     return ConversationHandler.END
 
 
@@ -159,9 +159,9 @@ async def check_trade_volumn(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
         c = update_customer_trade_volumn(uid, first_day_of_month, today)
         if c:
-            await update.message.reply_text(f"查询成功,距1号到今天,您的交易额为:{c['trade_volumn']}")
+            await update.message.reply_text(f"🔎查詢成功,距離本月1號到今日,您的交易額為:{c['trade_volumn']}")
             return ConversationHandler.END
-    await update.message.reply_text(f"查询失败请重试")
+    await update.message.reply_text(f"❌查詢失敗請重試")
     return ConversationHandler.END
 
 
@@ -189,8 +189,10 @@ async def kick_group_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-async def send_heartbeat(context):
-    await context.bot.send_message("-1002217128790", text="heartbeat")
+# async def send_heartbeat(context: ContextTypes.DEFAULT_TYPE):
+#     bot = context.bot
+#     info = await bot.get_me()
+#     await context.bot.send_message(info..id, text="heartbeat")
 
 
 # Usage

@@ -10,10 +10,10 @@ def extract_numeric_uid(input_uid):
     return ''.join(re.findall(r'\d+', input_uid))
 
 
-async def create_group_invite_link(group_id, context: ContextTypes.DEFAULT_TYPE):
+async def create_group_invite_link(group_id, vip_group_id, context: ContextTypes.DEFAULT_TYPE):
     try:
         invite_link = await context.bot.create_chat_invite_link(chat_id=group_id, member_limit=1)
-        invite_link_sec = await context.bot.create_chat_invite_link(chat_id=group_id, member_limit=1)
+        invite_link_sec = await context.bot.create_chat_invite_link(chat_id=vip_group_id, member_limit=1)
         return invite_link, invite_link_sec
     except Exception as ex:
         log.error("Error occurred when creating invite link, exception=%s", ex)

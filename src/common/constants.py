@@ -83,14 +83,16 @@ MAIN_GROUP_ID: Final = config['service']['telegram']['main-group-id']
 PRIVATE_GROUP_ID: Final = '-1002043576596'
 TEST_GROUP_ID: Final = config['service']['telegram']['test-group-id']
 
-FINISH_CONVERSATION_MESSAGE: Final = """已终止对话,感谢关注,祝您交易顺利!"""
+FINISH_CONVERSATION_MESSAGE: Final = """🦀已終止對話,感謝關注,祝您交易順利!📈"""
 
-SUCCESS_MESSAGE_UID_CHECK: Final = """您已验证成功!感谢关注!"""
+SUCCESS_MESSAGE_UID_CHECK: Final = """🦀您已驗證成功!感謝關注!✅"""
 SUCCESS_MESSAGE_REJOIN: Final = """"""
 
-ERROR_MESSAGE_FROM_BOT_REJOIN: Final = """未达到入群资格,如有疑问请咨询群主或管理,本次对话结束,感谢使用"""
-ERROR_MESSAGE_FROM_BOT: Final = """UID不正确,本次对话结束,如需重新验证,请输入'/check'重新验证"""
-ERROR_MESSAGE_FROM_BOT_USER_EXIST: Final = """UID已验证过,无须再次验证,本次对话结束,感谢使用,祝交易顺利!"""
-ERROR_MESSAGE_FROM_BOT_USER_BANNED: Final = """您因当月交易额未满一万USDT被移出交易群组,如有疑问请咨询群主或管理,本次对话结束,感谢使用,
-祝交易顺利!"""
-ERROR_MESSAGE_FROM_BOT_DUPLICATED_UID_CHECK: Final = """您已验证过,无须再次验证!感谢使用"""
+ERROR_MESSAGE_FROM_BOT_REJOIN: Final = """❌未達入群資格,如有疑問請諮詢群主或管理🦀"""
+ERROR_MESSAGE_FROM_BOT: Final = """❌UID不正確,本對話結束,如需重新驗證\n✔️請輸入'/check'重新驗證"""
+ERROR_MESSAGE_FROM_BOT_USER_EXIST: Final = """☑️UID已驗證過,無須再次驗證,祝交易順利!📈"""
+ERROR_MESSAGE_FROM_BOT_USER_BANNED: Final = """❌您因當月交易額未滿1萬u被移出群組\n""
+                                            📈當交易額再次達到1萬u或一個月後\n
+                                            ✅即可點選/rejoin重新加回\n
+                                            🦀如有疑問請諮詢群主或管理,感謝使用,祝交易順利!"""
+ERROR_MESSAGE_FROM_BOT_DUPLICATED_UID_CHECK: Final = """🦀您已驗證過,無須再次驗證!祝您交易順利!✅"""

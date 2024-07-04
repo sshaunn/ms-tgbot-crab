@@ -25,7 +25,6 @@ from src.infrastructure.telegram.telegram_service import (check_customer_uid_com
                                                           check_customer_membership,
                                                           kick_group_member,
                                                           reinvite_customer,
-                                                          send_heartbeat,
                                                           check_trade_volumn)
 from telegram import ForceReply, Update, ChatMember, ReplyKeyboardMarkup
 from telegram.ext import (CommandHandler,
@@ -49,34 +48,44 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "有些訂單接受度較低，在大群發布容易被噴\n"
         "因此簡單設立一個門檻，避免路人粉瞎操作爆倉\n"
         "加上之後會有獎勵活動避免註冊後白嫖\n"
-        "每個月最低10000u交易量(含槓桿)"
-        "非常低的標準，每月1號核對\n\n"
+        "每個月最低10000u交易量(含槓桿)非常低的標準\n"
+        "每月1號核對，若交易額不符合要求將會移除VIP群及交流群\n"
+        "直到交易額再次達到10000u或一個月後點即可/rejoin重新加回\n"
+        "如果不知道是否符合要求，機器人也有交易額查詢功能可以使用\n\n"
+        
         "內容：\n"
-        "🅰️最高20%合約20+20%現貨手續費減免✨\n"
+        "🅰️最高20%合約20%+20%現貨手續費減免✨\n"
         "🅱️專屬團隊bitget跟單服務\n"
+        "🆎蟹老闆🦀親自帶單\n"
         "⚡️VIP群高盈虧比策略分享\n"
         "🧽交流群加入資格\n"
         "加入步驟：\n"
-        "1️⃣點擊連結註冊帳號⭐️\n"
+        "1️⃣點擊鏈接註冊賬號⭐️\n"
         "https://partner.bitget.fit/bg/MrKrabs\n"
         "2️⃣發送UID給機器人確認♥️\n"
         "https://t.me/wedjatbtcVIP_bot\n"
-        "⚠️邀請連結為一次性使用⚠️\n"
+        "⚠️邀請鏈接為一次性使用⚠️\n"
         "⚠️註冊後記得點擊下方加入在退出⚠️\n"
-        "⚠️否則無法再次點擊⚠️\n\n"
-        "⚠️以下是不同会员入群命令以及交易额查询⚠️\n\n"
-        "/rejoin - 若之前交易额不满足要求将会被移除VIP群 重新加群请输入此命令\n"
-        "/volume - 交易总额查询 请输入此命令\n"
-        "/check - 老会员信息录入请输入此命令\n"
-        "/join - 新加群会员请输入此命令\n\n"
-        "若有任何疑问请直接私讯我本人谢谢\n"
-        "🦀≡≡≡≡≡≡≡≡▷►◈◄◁≡≡≡≡≡≡≡≡🦀"
+        "⚠️否則無法再點擊⚠️\n\n"
+        
+        "☢️以下是不同會員入群指令以及交易額查詢☢️\n"
+        
+        "/rejoin - 踢出後重新加群 請輸入此指令\n"
+        "/volume - 交易總額查詢 請輸入此指令\n"
+        "/check - 舊會員資料輸入 請輸入此指令\n"
+        "/join - 新加群會員 請輸入此指令\n\n"
+        
+        "有任何疑問請直接私訊本人謝謝🕳\n"
+        "https://t.me/wedjatbtc\n\n"
+        
+        "🦀≡≡≡≡≡≡≡≡▷►◈◄◁≡≡≡≡≡≡≡≡🦀\n"
     )
 
     # Create keyboard layout
     keyboard = [
         ['/rejoin', '/volume'],
-        ['/check', '/join']
+        ['/check', '/join'],
+        ['/cancel']
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
@@ -111,18 +120,5 @@ def bot_app():
     application.add_handler(conversation_handler(check, kick_group_member, cancel, UID, 'kick'))
     application.add_handler(conversation_handler(check, reinvite_customer, cancel, UID, 'rejoin'))
     application.add_handler(ChatMemberHandler(check_customer_membership, ChatMemberHandler.CHAT_MEMBER))
-    application.job_queue.run_repeating(send_heartbeat, interval=1800, first=1800)
-    # check_conversation_handler()
-    #
-    # # on different commands - answer in Telegram
-    # application.add_handler(CommandHandler("start", start))
-    # application.add_handler(CommandHandler("help", help_command))
-    #
-    # # on non command i.e message - echo the message on Telegram
-    # application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, save_customer_command))
-    # return application
-    # application.start()
-    # Run the bot until the user presses Ctrl-C
-
     application.run_polling(allowed_updates=Update.ALL_TYPES)
-    # return application
+    # application.job_queue.run_repeating(send_heartbeat, interval=10, first=0)
