@@ -70,7 +70,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         
         "☢️以下是不同會員入群指令以及交易額查詢☢️\n"
         
-        "/start - 開始使用機器人"
+        "/start - 開始使用機器人\n"
         # "/rejoin - 踢出後重新加群 請輸入此指令\n"
         "/volume - 交易總額查詢 請輸入此指令\n"
         "/check - 舊會員資料輸入 請輸入此指令\n"
