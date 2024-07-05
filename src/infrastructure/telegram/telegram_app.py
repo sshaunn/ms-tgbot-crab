@@ -25,7 +25,7 @@ from src.infrastructure.telegram.telegram_service import (check_customer_uid_com
                                                           check_customer_membership,
                                                           kick_group_member,
                                                           reinvite_customer,
-                                                          check_trade_volumn)
+                                                          check_trade_volumn, send_heartbeat)
 from telegram import ForceReply, Update, ChatMember, ReplyKeyboardMarkup
 from telegram.ext import (CommandHandler,
                           ContextTypes,
@@ -70,6 +70,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         
         "☢️以下是不同會員入群指令以及交易額查詢☢️\n"
         
+        "/start - 開始使用機器人"
         "/rejoin - 踢出後重新加群 請輸入此指令\n"
         "/volume - 交易總額查詢 請輸入此指令\n"
         "/check - 舊會員資料輸入 請輸入此指令\n"
@@ -83,9 +84,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     # Create keyboard layout
     keyboard = [
-        ['/rejoin', '/volume'],
-        ['/check', '/join'],
-        ['/cancel']
+        ['/join', '/check', '/rejoin', '/volume'],
+        ['/start', "/cancel"]
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
@@ -120,5 +120,5 @@ def bot_app():
     application.add_handler(conversation_handler(check, kick_group_member, cancel, UID, 'kick'))
     application.add_handler(conversation_handler(check, reinvite_customer, cancel, UID, 'rejoin'))
     application.add_handler(ChatMemberHandler(check_customer_membership, ChatMemberHandler.CHAT_MEMBER))
+    application.job_queue.run_repeating(send_heartbeat, interval=3600, first=3600)
     application.run_polling(allowed_updates=Update.ALL_TYPES)
-    # application.job_queue.run_repeating(send_heartbeat, interval=10, first=0)

@@ -28,7 +28,10 @@ async def check_customer_uid_command(update: Update, context: ContextTypes.DEFAU
     uid = extract_numeric_uid(message)
     customer = get_customer_by_client_uid(uid)
 
-    if chat_type == 'private' and not message == "/cancel":
+    if chat_type == 'private':
+
+        if message == "/cancel":
+            return ConversationHandler.END
 
         if not vld.is_valid_uid(customer):
             log.error("UID is not matching, user_id=%s, user_name=%s", user.id, user.first_name)
@@ -67,7 +70,10 @@ async def start_customer_uid_command(update: Update, context: ContextTypes.DEFAU
     uid = extract_numeric_uid(message)
     customer = get_customer_by_client_uid(uid)
 
-    if chat_type == 'private' and not message == "/cancel":
+    if chat_type == 'private':
+
+        if message == "/cancel":
+            return ConversationHandler.END
 
         if not vld.is_valid_uid(customer):
             log.error("UID is not matching, uid=%s, user_id=%s, user_name=%s", uid, user.id, user.first_name)
@@ -106,26 +112,27 @@ async def reinvite_customer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     chat_type = update.message.chat.type
     message = update.message.text
-    uid = extract_numeric_uid(message)
-    if message == "/cancel":
-        return ConversationHandler.END
-    customer = get_customer_by_uid(uid)
-    if not customer:
-        await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_REJOIN)
-        return ConversationHandler.END
+    if chat_type == 'private':
+        uid = extract_numeric_uid(message)
+        if message == "/cancel":
+            return ConversationHandler.END
+        customer = get_customer_by_uid(uid)
+        if not customer:
+            await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_REJOIN)
+            return ConversationHandler.END
 
-    if not vld.is_over_trade_volumn(uid) and not vld.is_ban(customer['left_time']):
-        await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_REJOIN)
-        return ConversationHandler.END
+        if not vld.is_over_trade_volumn(uid) and not vld.is_ban(customer['left_time']):
+            await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_REJOIN)
+            return ConversationHandler.END
 
-    update_customer_rejoin(uid, False)
-    invite_tuple = await create_group_invite_link(c.MAIN_GROUP_ID, c.VIP_GROUP_ID, context)
-    log.info("sending invite link to the user with uid=%s, user=%s", uid, customer)
-    inv_first, inv_sec = invite_tuple
-    await update.message.reply_text(c.SUCCESS_MESSAGE_UID_CHECK)
-    await update.message.reply_text(f"🍍鳳梨屋交流群邀請連結: {inv_first.invite_link}")
-    await update.message.reply_text(f"🪣海之霸VIP群邀請連結: {inv_sec.invite_link}")
-    return ConversationHandler.END
+        update_customer_rejoin(uid, False)
+        invite_tuple = await create_group_invite_link(c.MAIN_GROUP_ID, c.VIP_GROUP_ID, context)
+        log.info("sending invite link to the user with uid=%s, user=%s", uid, customer)
+        inv_first, inv_sec = invite_tuple
+        await update.message.reply_text(c.SUCCESS_MESSAGE_UID_CHECK)
+        await update.message.reply_text(f"🍍鳳梨屋交流群邀請連結: {inv_first.invite_link}")
+        await update.message.reply_text(f"🪣海之霸VIP群邀請連結: {inv_sec.invite_link}")
+        return ConversationHandler.END
 
 
 async def check_customer_membership(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -147,7 +154,10 @@ async def check_trade_volumn(update: Update, context: ContextTypes.DEFAULT_TYPE)
     cus = get_customer_by_uid(uid)
     if message == "/cancel":
         return ConversationHandler.END
-    if chat_type == 'private' and not message == '/cancel':
+    if chat_type == 'private':
+        if message == "/cancel":
+            return ConversationHandler.END
+
         if not vld.is_valid_uid(customer) and not cus:
             log.error("UID is not matching, uid=%s, user_id=%s, user_name=%s", uid, user.id, user.first_name)
             await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT)
@@ -189,10 +199,8 @@ async def kick_group_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
-# async def send_heartbeat(context: ContextTypes.DEFAULT_TYPE):
-#     bot = context.bot
-#     info = await bot.get_me()
-#     await context.bot.send_message(info..id, text="heartbeat")
+async def send_heartbeat(context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message("-1002217128790", text="heartbeat")
 
 
 # Usage

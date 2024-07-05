@@ -24,8 +24,12 @@ customer_blueprint = Blueprint('customer', __name__, url_prefix='/api')
 telegram_blueprint = Blueprint('telegram', __name__, url_prefix='/api')
 
 
-@timer_blueprint.route('/admin/gettime', methods=['GET'])
+@timer_blueprint.route('/admin/gettime', methods=['POST'])
 def get_all():
+    req = request.json
+    uid = req['uid']
+    customer = get_customer_by_client_uid(uid)
+    log.info("customer = %s", customer)
     return "ok"
 
 
