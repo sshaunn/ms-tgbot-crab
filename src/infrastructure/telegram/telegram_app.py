@@ -71,7 +71,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "☢️以下是不同會員入群指令以及交易額查詢☢️\n"
         
         "/start - 開始使用機器人"
-        "/rejoin - 踢出後重新加群 請輸入此指令\n"
+        # "/rejoin - 踢出後重新加群 請輸入此指令\n"
         "/volume - 交易總額查詢 請輸入此指令\n"
         "/check - 舊會員資料輸入 請輸入此指令\n"
         "/join - 新加群會員 請輸入此指令\n\n"
@@ -84,7 +84,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     # Create keyboard layout
     keyboard = [
-        ['/join', '/check', '/rejoin', '/volume'],
+        ['/join',
+         '/check',
+         # '/rejoin',
+         '/volume'],
         ['/start', "/cancel"]
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)

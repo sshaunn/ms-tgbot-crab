@@ -27,16 +27,18 @@ async def check_customer_uid_command(update: Update, context: ContextTypes.DEFAU
     message = update.message.text
     uid = extract_numeric_uid(message)
     customer = get_customer_by_client_uid(uid)
+    cus = get_customer_by_uid(uid)
 
     if chat_type == 'private':
 
         if message == "/cancel":
+            await update.message.reply_text(c.FINISH_CONVERSATION_MESSAGE)
             return ConversationHandler.END
-
-        if not vld.is_valid_uid(customer):
-            log.error("UID is not matching, user_id=%s, user_name=%s", user.id, user.first_name)
-            await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT)
-            return ConversationHandler.END
+        if not cus:
+            if not vld.is_valid_uid(customer):
+                log.error("UID is not matching, user_id=%s, user_name=%s", user.id, user.first_name)
+                await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT)
+                return ConversationHandler.END
 
         customer = save_customer(uid,
                                  user.first_name,
@@ -76,6 +78,7 @@ async def start_customer_uid_command(update: Update, context: ContextTypes.DEFAU
     if chat_type == 'private':
 
         if message == "/cancel":
+            await update.message.reply_text(c.FINISH_CONVERSATION_MESSAGE)
             return ConversationHandler.END
 
         if not vld.is_valid_uid(customer):
@@ -99,6 +102,7 @@ async def start_customer_uid_command(update: Update, context: ContextTypes.DEFAU
                                  user.last_name,
                                  user.id,
                                  customer['registerTime'],
+                                 is_member=True,
                                  join_time=get_current_date())
         update_customer_trade_volumn_by_client(uid)
         invite_tuple = await create_group_invite_link(c.MAIN_GROUP_ID, c.VIP_GROUP_ID, context)
@@ -118,6 +122,7 @@ async def reinvite_customer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if chat_type == 'private':
         uid = extract_numeric_uid(message)
         if message == "/cancel":
+            await update.message.reply_text(c.FINISH_CONVERSATION_MESSAGE)
             return ConversationHandler.END
         customer = get_customer_by_uid(uid)
         if not customer:
@@ -155,15 +160,18 @@ async def check_trade_volumn(update: Update, context: ContextTypes.DEFAULT_TYPE)
     uid = extract_numeric_uid(message)
     customer = get_customer_by_client_uid(uid)
     cus = get_customer_by_uid(uid)
-    if message == "/cancel":
-        return ConversationHandler.END
     if chat_type == 'private':
         if message == "/cancel":
+            await update.message.reply_text(c.FINISH_CONVERSATION_MESSAGE)
             return ConversationHandler.END
 
-        if not vld.is_valid_uid(customer) and not cus:
+        if not vld.is_valid_uid(customer):
             log.error("UID is not matching, uid=%s, user_id=%s, user_name=%s", uid, user.id, user.first_name)
-            await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT)
+            await update.message.reply_text("❌UID不正確,本對話結束,如需重新驗證\n✔️請輸入'/check'重新驗證")
+            return ConversationHandler.END
+
+        if not cus:
+            await update.message.reply_text("請先輸入/check輸入會員資料 本對話結")
             return ConversationHandler.END
 
         today_date = datetime.now()
