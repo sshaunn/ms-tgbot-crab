@@ -97,6 +97,11 @@ async def start_customer_uid_command(update: Update, context: ContextTypes.DEFAU
             await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_USER_EXIST)
             return ConversationHandler.END
 
+        today_date = datetime.now()
+        today = int(time.time() * 1000)
+        first_day_of_month = int(
+            datetime.combine(date(today_date.year, today_date.month, 1), datetime.min.time()).timestamp() * 1000)
+
         customer = save_customer(uid,
                                  user.first_name,
                                  user.last_name,
@@ -104,14 +109,15 @@ async def start_customer_uid_command(update: Update, context: ContextTypes.DEFAU
                                  customer['registerTime'],
                                  is_member=True,
                                  join_time=get_current_date())
-        update_customer_trade_volumn_by_client(uid)
+
         invite_tuple = await create_group_invite_link(c.MAIN_GROUP_ID, c.VIP_GROUP_ID, context)
         inv_first, inv_sec = invite_tuple
         log.info("sending invite link to the user with uid=%s, user=%s", uid, customer)
-
+        volumn = update_customer_trade_volumn(uid, first_day_of_month, today)
         await update.message.reply_text(c.SUCCESS_MESSAGE_UID_CHECK)
-        await update.message.reply_text(f"这是第一个邀请链接: {inv_first.invite_link}")
-        await update.message.reply_text(f"这是第二个邀请链接: {inv_sec.invite_link}")
+        await update.message.reply_text(f"🍍鳳梨屋交流群邀請連結: {inv_first.invite_link}")
+        await update.message.reply_text(f"🪣海之霸VIP群邀請連結: {inv_sec.invite_link}")
+        await update.message.reply_text(f"距離本月1號到今日,您的交易額為:{volumn}")
     return ConversationHandler.END
 
 
@@ -178,9 +184,9 @@ async def check_trade_volumn(update: Update, context: ContextTypes.DEFAULT_TYPE)
         today = int(time.time() * 1000)
         first_day_of_month = int(datetime.combine(date(today_date.year, today_date.month, 1), datetime.min.time()).timestamp() * 1000)
 
-        c = update_customer_trade_volumn(uid, first_day_of_month, today)
-        if c:
-            await update.message.reply_text(f"🔎查詢成功,距離本月1號到今日,您的交易額為:{c['trade_volumn']}")
+        cust = update_customer_trade_volumn(uid, first_day_of_month, today)
+        if cust:
+            await update.message.reply_text(f"🔎查詢成功,距離本月1號到今日,您的交易額為:{cust['trade_volumn']}")
             return ConversationHandler.END
     await update.message.reply_text(f"❌查詢失敗請重試")
     return ConversationHandler.END
