@@ -14,9 +14,9 @@ def get_customers():
     # url = f"{c.BASE_URL}{c.SERVER_TIME_ENDPOINT}"
     # response = requests.get(url)
     customers = customer_helper.get_all_customers()
-    list(map(lambda x: {'register_time': x['register_time'].strftime('%Y-%m-%d'),
-                        'join_time': x['join_time'].strftime('%Y-%m-%d') if x['join_time'] else None,
-                        'left_time': x['left_time'].strftime('%Y-%m-%d') if x['left_time'] else None}, customers))
+    list(map(lambda x: {'register_time': x['register_time'] if x['register_time'] else None,
+                        'join_time': x['join_time'] if x['join_time'] else None,
+                        'left_time': x['left_time'] if x['left_time'] else None}, customers))
     # customer_helper.save_customer(101, "shaun", "shen", "101", "1710845728000")
     return customers
 

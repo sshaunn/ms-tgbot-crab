@@ -45,21 +45,24 @@ async def check_customer_uid_command(update: Update, context: ContextTypes.DEFAU
                                  customer['registerTime'],
                                  join_time=get_current_date())
 
-        if not customer:
-            await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_DUPLICATED_UID_CHECK)
-            await update.message.reply_text(c.FINISH_CONVERSATION_MESSAGE)
-            return ConversationHandler.END
+        update_customer_membership(uid, True)
 
-        membership = await context.bot.get_chat_member(chat_id=c.VIP_GROUP_ID, user_id=user.id)
-        log.info("UID matching success, current user with UID=%s has membership=%s, and user=%s",
-                 uid,
-                 membership,
-                 customer)
+        # if not customer:
+        #     await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_DUPLICATED_UID_CHECK)
+        #     await update.message.reply_text(c.FINISH_CONVERSATION_MESSAGE)
+        #     return ConversationHandler.END
 
-        if membership.status in [ChatMember.MEMBER, ChatMember.OWNER, ChatMember.ADMINISTRATOR]:
-            update_customer_membership(uid, True)
-        update_customer_trade_volumn_by_client(uid)
+        # membership = await context.bot.get_chat_member(chat_id=c.VIP_GROUP_ID, user_id=user.id)
+        # log.info("UID matching success, current user with UID=%s has membership=%s, and user=%s",
+        #          uid,
+        #          membership,
+        #          customer)
+
+        # if membership.status in [ChatMember.MEMBER, ChatMember.OWNER, ChatMember.ADMINISTRATOR]:
+        #     update_customer_membership(uid, True)
+        # update_customer_trade_volumn_by_client(uid)
         await update.message.reply_text(c.SUCCESS_MESSAGE_UID_CHECK)
+        return ConversationHandler.END
     return ConversationHandler.END
 
 
