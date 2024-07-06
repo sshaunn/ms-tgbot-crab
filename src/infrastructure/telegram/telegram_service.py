@@ -23,7 +23,7 @@ NEXT = range(1)
 
 async def check_customer_uid_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
-    chat_type = update.message.chat.type
+    chat_type = update.effective_chat.type
     message = update.message.text
     uid = extract_numeric_uid(message)
     customer = get_customer_by_client_uid(uid)
@@ -161,7 +161,7 @@ async def check_customer_membership(update: Update, context: ContextTypes.DEFAUL
 
 async def check_trade_volumn(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
-    chat_type = update.message.chat.type
+    chat_type = update.effective_chat.type
     message = update.message.text
     uid = extract_numeric_uid(message)
     customer = get_customer_by_client_uid(uid)
@@ -188,7 +188,8 @@ async def check_trade_volumn(update: Update, context: ContextTypes.DEFAULT_TYPE)
         if cust:
             await update.message.reply_text(f"🔎查詢成功,距離本月1號到今日,您的交易額為:{cust['trade_volumn']}")
             return ConversationHandler.END
-    await update.message.reply_text(f"❌查詢失敗請重試")
+        await update.message.reply_text(f"❌查詢失敗請重試")
+        return ConversationHandler.END
     return ConversationHandler.END
 
 
