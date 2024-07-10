@@ -1,4 +1,5 @@
 import threading
+import time
 
 from flask import Flask
 from flask_cors import CORS
@@ -23,3 +24,4 @@ if __name__ == '__main__':
             bot_app()
         except Exception as e:
             log.info("Telegram bot crashed with exception=%s, restarting...", e)
+            time.sleep(5)

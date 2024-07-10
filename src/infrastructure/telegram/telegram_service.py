@@ -177,7 +177,7 @@ async def check_trade_volumn(update: Update, context: ContextTypes.DEFAULT_TYPE)
             return ConversationHandler.END
 
         if not cus:
-            await update.message.reply_text("請先輸入/check輸入會員資料 本對話結")
+            await update.message.reply_text("📲未在群裡的新會員請先輸入/join輸入會員資料\n📱已在群裡的老會員則先輸入/check輸入會員資料\n本對話結束")
             return ConversationHandler.END
 
         today_date = datetime.now()

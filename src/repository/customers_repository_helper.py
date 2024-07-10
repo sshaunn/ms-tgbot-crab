@@ -8,6 +8,38 @@ from psycopg.errors import UniqueViolation
 from src.bitget.utils import epoch_date_formater
 
 
+def get_customers_with_pagination(limit, offset):
+    try:
+        records = dbconfig.fetch_all_cursor_with_conditions("""
+        SELECT * FROM erp4btc.customers c
+        ORDER BY c.trade_volumn DESC
+        LIMIT %s
+        OFFSET %s""", (limit, offset))
+        if len(records) > 0:
+            log.info("start fetching customer by pagination with limit=%s and offset=%s, and records=%s ",
+                     limit, offset, records)
+            return records
+        else:
+            return None
+    except Exception as ex:
+        log.error("Error occurred when fetching customer records with pagination, exception=%s", ex)
+        return None
+
+
+def get_customers_count():
+    try:
+        count = dbconfig.fetch_cursor("""
+        SELECT count(*) FROM erp4btc.customers""")
+        if count:
+            log.info("start fetching customer count=%s", count)
+            return count
+        else:
+            return None
+    except Exception as ex:
+        log.error("Error occurred when fetching customer count, exception=%s", ex)
+        return None
+
+
 def get_customer_by_uid(uid):
     try:
         record = dbconfig.fetch_cursor("""
@@ -265,4 +297,20 @@ def save_tgid(tgid):
         return None
     except Exception as ex:
         log.error("Error occurred when inserting customer record with tgid=%s, and exception=%s", tgid, ex)
+        return None
+
+
+def save_daily_trade_volumn(uid, trade_volumn, date):
+    try:
+        dbconfig.exec_cursor("""
+        INSERT INTO erp4btc.trades (uid, trade_volumn, date) VALUES (%s, %s, %s)""", uid, trade_volumn, date)
+        # log.info("saving customer record into database, customer=%s", customer.to_dict())
+        return uid, trade_volumn, date
+    except UniqueViolation as uv:
+        log.error("Error occurred when inserting customer daily trade volumn with uid=%s, volumn=%s, and exception=%s",
+                  uid, trade_volumn, uv)
+        return None
+    except Exception as ex:
+        log.error("Error occurred when inserting customer daily trade volumn with uid=%s, volumn=%s, and exception=%s",
+                  uid, trade_volumn, ex)
         return None

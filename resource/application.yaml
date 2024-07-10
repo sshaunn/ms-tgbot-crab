@@ -1,6 +1,8 @@
 server:
   port: 5000
 
+environment: dev
+
 service:
   telegram:
     main-group-id: -1001999851882

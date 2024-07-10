@@ -1,4 +1,4 @@
-import asyncio
+import src.service.customers_service as service
 
 from flask import Blueprint, jsonify, request
 
@@ -31,6 +31,17 @@ def get_all():
     customer = get_customer_by_client_uid(uid)
     log.info("customer = %s", customer)
     return "ok"
+
+
+@customer_blueprint.route('/admin/allCustomers', methods=['GET'])
+def get_customers_with_pagination():
+    page_size = request.args.get('pageSize', 10, type=int)
+    page_number = request.args.get('pageNumber', 0, type=int)
+    customers = service.get_customers_with_pagination(page_size, page_number)
+    count = service.get_customers_count()
+    if customers and count:
+        return jsonify({'count': count, 'customers': customers}), 200
+    return jsonify({'err': f"no more records", 'status': 400}), 400
 
 
 @customer_blueprint.route('/admin/customers', methods=['GET'])
@@ -143,6 +154,19 @@ def update_member_ban_status():
 def get_scheduler():
     update_customer_trade_volumn_scheduler()
     return "ok", 200
+
+
+@customer_blueprint.route('/admin/customer/dailytrade/scheduler', methods=['GET'])
+def add_customer_daily_trade():
+    service.add_daily_trade_volumn_scheduler()
+    return "OK", 200
+
+
+@customer_blueprint.route('/admin/customer/tradinghistory', methods=['GET'])
+def init_trading_history():
+    service.init_customer_trade_history()
+    return "OK", 200
+
 
 # @telegram_blueprint.route('/', methods=['POST'])
 # def webhook():

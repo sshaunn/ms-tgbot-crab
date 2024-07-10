@@ -115,7 +115,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     await update.message.reply_text("Help!")
 
 
-def bot_app():
+async def bot_app():
     """Start the bot."""
     application = Application.builder().token(c.TOKEN).build()
     application.add_handler(CommandHandler("start", start))
@@ -126,4 +126,4 @@ def bot_app():
     application.add_handler(conversation_handler(check, reinvite_customer, cancel, UID, 'rejoin'))
     application.add_handler(ChatMemberHandler(check_customer_membership, ChatMemberHandler.CHAT_MEMBER))
     application.job_queue.run_repeating(send_heartbeat, interval=3600, first=3600)
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
+    await application.run_polling(allowed_updates=Update.ALL_TYPES)

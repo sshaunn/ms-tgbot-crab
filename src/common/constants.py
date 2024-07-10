@@ -6,12 +6,12 @@ import yaml
 from dotenv import load_dotenv, find_dotenv
 from typing import Final
 
+
+load_dotenv(find_dotenv())
 project_root = Path(__file__).parent.parent.parent
 
 # Construct the path to the yaml file
-resource_path = project_root / 'resource' / 'application.yaml'
-
-load_dotenv(find_dotenv())
+resource_path = project_root / 'resource' / "application.yaml"
 
 
 # def configure():
