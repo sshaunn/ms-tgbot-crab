@@ -19,9 +19,10 @@ app.register_blueprint(admin_blueprint)
 
 if __name__ == '__main__':
     threading.Thread(target=lambda: app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)).start()
-    while True:
-        try:
-            bot_app()
-        except Exception as e:
-            log.info("Telegram bot crashed with exception=%s, restarting...", e)
-            time.sleep(5)
+    bot_app()
+    # while True:
+    #     try:
+    #         bot_app()
+    #     except Exception as e:
+    #         log.info("Telegram bot crashed with exception=%s, restarting...", e)
+    #         time.sleep(5)
