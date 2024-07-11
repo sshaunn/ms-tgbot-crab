@@ -89,7 +89,7 @@ SUCCESS_MESSAGE_UID_CHECK: Final = """🦀您已驗證成功!感謝關注!✅"""
 SUCCESS_MESSAGE_REJOIN: Final = """"""
 
 ERROR_MESSAGE_FROM_BOT_REJOIN: Final = """❌未達入群資格,如有疑問請諮詢群主或管理🦀"""
-ERROR_MESSAGE_FROM_BOT: Final = """❌UID不正確,本對話結束,如需重新驗證\n✔️請輸入'/check'重新驗證"""
+ERROR_MESSAGE_FROM_BOT: Final = """❌UID不正確,本對話結束\n📲未在群裡的新會員請先輸入/join輸入會員資料\n📱已在群裡的老會員則先輸入/check輸入會員資料"""
 ERROR_MESSAGE_FROM_BOT_USER_EXIST: Final = """☑️UID已驗證過,無須再次驗證,祝交易順利!📈"""
 ERROR_MESSAGE_FROM_BOT_USER_BANNED: Final = """❌您因當月交易額未滿1萬u被移出群組\n""
                                             📈當交易額再次達到1萬u或一個月後\n

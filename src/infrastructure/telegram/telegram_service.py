@@ -173,7 +173,7 @@ async def check_trade_volumn(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
         if not vld.is_valid_uid(customer):
             log.error("UID is not matching, uid=%s, user_id=%s, user_name=%s", uid, user.id, user.first_name)
-            await update.message.reply_text("❌UID不正確,本對話結束,如需重新驗證\n✔️請輸入'/check'重新驗證")
+            await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT)
             return ConversationHandler.END
 
         if not cus:
