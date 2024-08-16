@@ -3,6 +3,9 @@ server:
 
 environment: dev
 
+featureToggler:
+  volumn-check: True
+
 service:
   telegram:
     main-group-id: -1001999851882

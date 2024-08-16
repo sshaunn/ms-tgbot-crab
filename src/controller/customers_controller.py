@@ -162,11 +162,20 @@ def add_customer_daily_trade():
     return "OK", 200
 
 
-@customer_blueprint.route('/admin/customer/tradinghistory', methods=['GET'])
-def init_trading_history():
-    service.init_customer_trade_history()
-    return "OK", 200
+# @customer_blueprint.route('/admin/customer/tradinghistory', methods=['GET'])
+# def init_trading_history():
+#     service.init_customer_trade_history()
+#     return "OK", 200
 
+
+@customer_blueprint.route('/admin/customer/delete', methods=['POST'])
+def init_trading_history():
+    req = request.json
+    uid = req['uid']
+    cus = service.delete_customer_from_db(uid)
+    if cus[uid]:
+        return "OK", 200
+    return jsonify({'err': "Bad Request", 'status': 400}), 400
 
 # @telegram_blueprint.route('/', methods=['POST'])
 # def webhook():

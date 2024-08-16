@@ -74,6 +74,9 @@ DBNAME_PROD: Final = config['service']['database']['prod']['dbname']
 DB_USERNAME_PROD: Final = config['service']['database']['prod']['username']
 DB_PASSWORD_PROD: Final = config['service']['database']['prod']['password']
 
+# feature toggler
+FEATURE_TOGGLER: Final = config['featureToggler']['volumn-check']
+
 # tg group id
 EFFECTIVE_CHAT_ID: Final = '-1002087737560'
 VIP_GROUP_ID: Final = '-1001856345480'

@@ -18,6 +18,10 @@ def get_customers_count():
     return customer_helper.get_customers_count()
 
 
+def delete_customer_from_db(uid):
+    return customer_helper.delete_customer(uid)
+
+
 def get_customers():
     # url = f"{c.BASE_URL}{c.SERVER_TIME_ENDPOINT}"
     # response = requests.get(url)

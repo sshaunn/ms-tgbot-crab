@@ -314,3 +314,14 @@ def save_daily_trade_volumn(uid, trade_volumn, date):
         log.error("Error occurred when inserting customer daily trade volumn with uid=%s, volumn=%s, and exception=%s",
                   uid, trade_volumn, ex)
         return None
+
+
+def delete_customer(uid):
+    try:
+        dbconfig.exec_cursor("""
+        DELETE FROM erp4btc.customers
+        WHERE uid=%s""", uid)
+        return {"uid": uid, "message": "delete user success"}
+    except Exception as ex:
+        log.error("Error occurred when deleting customer record with uid=%s, and exception=%s", uid, ex)
+        return None
