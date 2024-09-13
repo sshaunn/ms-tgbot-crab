@@ -270,7 +270,7 @@ def update_customer_trade_volumn_scheduler():
                   "pageSize": 1000
                   }
         response = request.post(c.VOLUMN_ENDPOINT, params)
-        time.sleep(0.1)
+        time.sleep(0.15)
         trade_list = response["data"] if response["data"] else None
         if not trade_list:
             return None
