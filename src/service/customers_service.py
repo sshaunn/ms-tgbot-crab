@@ -214,11 +214,17 @@ def kick_group_members(trade_volumn=10000):
             "user_id": customer['tgid'],
             "until_date": int((time.time() + 10) * 1000)
         }
+        params_kick_main = {
+            "chat_id": c.MAIN_GROUP_ID,
+            "user_id": customer['tgid'],
+            "until_date": int((time.time() + 10) * 1000)
+        }
         # params_unban = {
         #     "chat_id": c.TEST_GROUP_ID,
         #     "user_id": customer['tgid'],
         # }
         requests.post(url_kick, params=params_kick)
+        requests.post(url_kick, params=params_kick_main)
         # requests.post(url_unban, params=params_unban)
         log.info("Kicking user=%s from group success", customer)
         update_customer_ban_status(customer['uid'], False, True, datetime.now())
