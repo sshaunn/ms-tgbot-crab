@@ -46,10 +46,10 @@ class Client(object):
         response = None
         if method == c.GET:
             response = requests.get(url, headers=header)
-            logging.log(20, "response=%s", response.text)
+            # logging.log(20, "response=%s", response.text)
         elif method == c.POST:
             response = requests.post(url, data=body, headers=header)
-            logging.log(20, "response=%s", response.text)
+            # logging.log(20, "response=%s", response.text)
             #response = requests.post(url, json=body, headers=header)
         elif method == c.DELETE:
             response = requests.delete(url, headers=header)

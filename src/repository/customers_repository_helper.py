@@ -141,7 +141,7 @@ def get_all_customers_under_trade_valumn(trade_volumn):
 
 def get_all_customers():
     try:
-        records = dbconfig.fetch_all_cursor("SELECT * FROM erp4btc.customers c ORDER BY c.trade_volumn DESC")
+        records = dbconfig.fetch_all_cursor("SELECT * FROM erp4btc.customers")
         if records:
             log.info("fetching customer record=%s", records)
             return records

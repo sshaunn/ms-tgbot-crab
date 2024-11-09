@@ -92,10 +92,10 @@ async def start_customer_uid_command(update: Update, context: ContextTypes.DEFAU
         #     await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_USER_BANNED)
         #     return ConversationHandler.END
 
-        if vld.is_exist_uid(uid):
-            log.error("UID is exist, uid=%s, user_id=%s, user_name=%s, customer=%s", uid, user.id, user.first_name, customer)
-            await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_USER_EXIST)
-            return ConversationHandler.END
+        # if vld.is_exist_uid(uid):
+        #     log.error("UID is exist, uid=%s, user_id=%s, user_name=%s, customer=%s", uid, user.id, user.first_name, customer)
+        #     await update.message.reply_text(c.ERROR_MESSAGE_FROM_BOT_USER_EXIST)
+        #     return ConversationHandler.END
 
         today_date = datetime.now()
         today = int(time.time() * 1000)

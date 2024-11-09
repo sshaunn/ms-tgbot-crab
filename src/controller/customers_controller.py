@@ -15,7 +15,8 @@ from src.service.customers_service import (
     kick_group_members,
     update_customer_rejoin,
     kick_all_zombies,
-    update_customer_trade_volumn_scheduler)
+    update_customer_trade_volumn_scheduler,
+    hotfix)
 
 # bot = bot_app().bot
 
@@ -24,13 +25,14 @@ customer_blueprint = Blueprint('customer', __name__, url_prefix='/api')
 telegram_blueprint = Blueprint('telegram', __name__, url_prefix='/api')
 
 
-@timer_blueprint.route('/admin/gettime', methods=['POST'])
+@timer_blueprint.route('/admin/gettime', methods=['GET'])
 def get_all():
-    req = request.json
-    uid = req['uid']
-    customer = get_customer_by_client_uid(uid)
-    log.info("customer = %s", customer)
-    return "ok"
+    # req = request.json
+    # uid = req['uid']
+    # customer = get_customer_by_client_uid(uid)
+    # log.info("customer = %s", customer)
+    return hotfix()
+    # return "ok"
 
 
 @customer_blueprint.route('/admin/allCustomers', methods=['GET'])

@@ -8,11 +8,11 @@ from psycopg.rows import class_row, dict_row
 def get_db_connection():
     # postgresql: // user: qpVTacISnsvdOYGHAMKJ3WSzPV2QgG3T @ dpg - cpvi0vpu0jms73at8ps0 - a / erp4btc
     # postgresql://user:qpVTacISnsvdOYGHAMKJ3WSzPV2QgG3T@dpg-cpvi0vpu0jms73at8ps0-a.singapore-postgres.render.com/erp4btc
-    if c.ENV == 'prod':
-        return psycopg.connect(f"host={c.DBHOST_PROD} dbname={c.DBNAME_PROD} user={c.DB_USERNAME_PROD} "
+    # if c.ENV == 'prod':
+    return psycopg.connect(f"host={c.DBHOST_PROD} dbname={c.DBNAME_PROD} user={c.DB_USERNAME_PROD} "
                                f"password={c.DB_PASSWORD_PROD}", row_factory=dict_row)
-    return psycopg.connect(f"host={c.DBHOST} dbname={c.DBNAME} user={c.DB_USERNAME} password={c.DB_PASSWORD}",
-                               row_factory=dict_row)
+    # return psycopg.connect(f"host={c.DBHOST} dbname={c.DBNAME} user={c.DB_USERNAME} password={c.DB_PASSWORD}",
+    #                            row_factory=dict_row)
 
 
 def exec_cursor(sql_query, *values):

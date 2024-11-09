@@ -31,7 +31,8 @@ service:
     username: postgres
     password: pass
     prod:
-      host: dpg-cpvi0vpu0jms73at8ps0-a
+#      host: dpg-cpvi0vpu0jms73at8ps0-a
+      host: dpg-cpvi0vpu0jms73at8ps0-a.singapore-postgres.render.com
       port: 5432
       dbname: erp4btc
       url: postgresql://user:qpVTacISnsvdOYGHAMKJ3WSzPV2QgG3T@dpg-cpvi0vpu0jms73at8ps0-a/erp4btc
